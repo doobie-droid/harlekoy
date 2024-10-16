@@ -42,12 +42,9 @@ class RandomizeUserDetails extends Command
             return Command::FAILURE;
         }
 
-        //TODO: Change this to exhaustive enum list or faker extension pending more information on acceptable timezone type
-        $randomTimezone = fake()->randomElement(["CET", "CST", "GMT+1"]);
-
         $user->first_name = fake()->firstName();
         $user->last_name = fake()->lastName();
-        $user->time_zone = $randomTimezone;
+        $user->time_zone = fake()->timezone();
         $user->save();
 
         $this->info(sprintf(

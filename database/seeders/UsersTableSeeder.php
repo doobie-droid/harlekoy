@@ -15,6 +15,12 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        User::factory(20)->create();
+        $timezones = ["CET", "CST", "GMT+1"];
+
+        User::factory(20)->create()->each(function ($user) use ($timezones) {
+            $user->update([
+                'time_zone' => fake()->randomElement($timezones),
+            ]);
+        });
     }
 }
