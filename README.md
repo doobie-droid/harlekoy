@@ -1,66 +1,86 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# SETUP PROJECT FOR LOCAL DEVELOPMENT ON WINDOWS WSL OR UBUNTU LINUX
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Pre-Requisites
+The following software programs are required for this project:
+| Software | Minimum Version             | Guides                                                                  |
+| -------- | --------------------------- | ----------------------------------------------------------------------- |
+| PHP      | `8.2.x`                     | See Below                                                               |
+| MySQL    | `5.7` | See Below                                                               |
+| Composer | `2.x`                       | [Composer Download](https://getcomposer.org/download/)                  |
+### PHP
+To install PHP on Ubuntu, run the following commands: 
+```console
+sudo apt install software-properties-common
+sudo add-apt-repository ppa:ondrej/php
+sudo apt update
+sudo apt install php8.2-fpm php8.2-common php8.2-mysql php8.2-xml php8.2-xmlrpc php8.2-curl php8.2-gd php8.2-imagick php8.2-cli php8.2-intl php8.2-dev php8.2-imap php8.2-mbstring php8.2-opcache php8.2-soap php8.2-zip unzip -y
+```
+## MySQL
+You may install MySQL on Ubuntu using the following command if you are using Ubuntu 18.10 or below :
+If you are using Ubuntu 18.10 or below, you may install MySQL using :
+```console
+sudo apt update
+sudo apt install mysql
+```
+Set the full version of MySQL in the command line
+```console
+sudo apt install -f mysql-client=5.7.38-1ubuntu18.04 mysql-community-server=5.7.38-1ubuntu18.04 mysql-server=5.7.38-1ubuntu18.04
+```
+If you are using Ubuntu 20 or above, read [this](https://medium.com/@lesliedouglas23/how-to-install-mysql-5-0-on-ubuntu-20-04-or-later-4d27de464eef) to install MySQL. 
 
-## About Laravel
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Project Setup
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+1. Clone the repository:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+```
+git clone git@github.com:doobie-droid/harlekoy.git && cd harlekoy
+```
 
-## Learning Laravel
+2. Create a copy from .env.example file:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+```
+cp .env.example .env
+```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+3. Fill in the requirements keys for local development as follows:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+* APP_URL: Your local app URL like localhost:8000
+* DB_USERNAME: Local DB username
+* DB_PASSWORD: Local DB password
 
-## Laravel Sponsors
+4. Run the composer:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+```
+composer install
+```
 
-### Premium Partners
+# Database
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+Run the following command to create and seed DB:
 
-## Contributing
+```
+php artisan migrate:fresh --seed
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# Testing
 
-## Code of Conduct
+1. Create an env for testing  from .env.example file:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```
+cp .env.example .env.testing
+```
+2. Change the DB_DATABASE value in your .env.testing to the DB_TEST_DATABASE value
 
-## Security Vulnerabilities
+```
+DB_DATABASE=harlekoy_testing
+```
+3. Create your testing database 
+```
+php artisan db:create {database_name} e.g. php artisan db:create harlekoy_testing
+```
+4. RUN YOUR TESTS USING PHP UNIT
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```
+php artisan test --filter {string}
+```
