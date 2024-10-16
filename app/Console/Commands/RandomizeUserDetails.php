@@ -56,7 +56,7 @@ class RandomizeUserDetails extends Command
             $user->last_name,
             $user->time_zone
         ));
-        
+
 
         return Command::SUCCESS;
     }

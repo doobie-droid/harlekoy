@@ -4,6 +4,7 @@ namespace Tests;
 
 use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Tests\Traits\RefreshTestingDatabase;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -18,7 +19,8 @@ abstract class TestCase extends BaseTestCase
     {
         $uses = parent::setUpTraits();
 
-        if (isset($uses[Traits\RefreshTestingDatabase::class])) {
+
+        if (isset($uses[RefreshTestingDatabase::class])) {
             $this->refreshTestDatabase();
         }
 
