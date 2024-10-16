@@ -25,6 +25,7 @@ class User extends Authenticatable
         'email',
         'password',
         'time_zone',
+        'synced_with_batch_api',
     ];
 
     /**
@@ -44,5 +45,6 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'synced_with_batch_api' => 'boolean',
     ];
 }
