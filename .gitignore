@@ -10,6 +10,7 @@
 .env.testing
 .phpunit.result.cache
 .phpunit.test_database.migrated
+.php-cs-fixer.cache
 Homestead.json
 Homestead.yaml
 auth.json
