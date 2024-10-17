@@ -40,4 +40,16 @@ class RandomizeUserDetailsTest extends TestCase
         $this->artisan('update:user', ['user_id' => 999])
             ->assertExitCode(Command::FAILURE);
     }
+
+    /** @test */
+    public function it_can_update_user_timezone_when_first_name_is_Samantha(): void
+    {
+        $user = $this->makeUser()->create(['first_name' => 'Samantha'])->first();
+        $previousTimeZone = $user->time_zone;
+
+        $this->artisan('update:user', ['user_id' => $user->id])
+            ->assertExitCode(Command::SUCCESS);
+
+        $this->assertNotEquals($previousTimeZone, $user->fresh()->time_zone);
+    }
 }
