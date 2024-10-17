@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\User;
 use App\Services\BatchService;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -34,10 +35,10 @@ class SyncUsersWithBatchApi implements ShouldQueue
     {
         $unSyncedUsers = User::where('synced_with_batch_api', false)
             ->limit(1000)
-            ->count();
+            ->get();
 
         $unSyncedUserIds = [];
-        if ($unSyncedUsers >= 1000) {
+        if ($unSyncedUsers->count() >= 1000) {
             User::where('synced_with_batch_api', false)
                 ->chunk(1000, function ($users) use (&$unSyncedUserIds) {
                     if ($this->batchApiService->updateUsersInBatch($users)) {
@@ -45,8 +46,14 @@ class SyncUsersWithBatchApi implements ShouldQueue
                     }
                 });
         }
+
         if (!empty($unSyncedUserIds)) {
             User::whereIn('id', $unSyncedUserIds)->update(['synced_with_batch_api' => true]);
+            return;
+        }
+
+        if (Carbon::now()->minute > 50 && $this->batchApiService->updateUsersInBatch($unSyncedUsers)) {
+            User::where('synced_with_batch_api', false)->update(['synced_with_batch_api' => true]);
         }
     }
 }

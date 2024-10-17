@@ -9,6 +9,7 @@ use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
+use Illuminate\Support\Facades\Log;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -90,6 +91,7 @@ abstract class API implements APIInterface
             $res  = json_decode((string) $results->getBody(), true);
             return response()->json($res)->getData();
         } catch (ClientException $exception) {
+            Log::error("Error in connecting to api: ",$exception->getMessage());
             return response()->json([
                 'status' => false,
                 'status_code' => $exception->getCode(),

@@ -5,6 +5,7 @@ namespace Tests\Unit\Jobs;
 use App\Jobs\SyncUsersWithBatchApi;
 use App\Models\User;
 use App\Services\BatchService;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Mockery;
 use Tests\TestCase;
@@ -21,9 +22,9 @@ class SyncUsersWithBatchApiTest extends TestCase
     }
 
     /** @test */
-    public function it_should_not_sync_users_if_less_than_1000_unSynced_users_exist()
+    public function it_should_not_sync_users_if_less_than_1000_unSynced_users_exist_and_less_than_50_minutes_have_passed()
     {
-
+        Carbon::setTestNow(Carbon::createFromTime(10, 40));
         $this->makeUser(500)->create(['synced_with_batch_api' => false]);
 
         (new SyncUsersWithBatchApi())->handle();
@@ -74,6 +75,21 @@ class SyncUsersWithBatchApiTest extends TestCase
             ->times(2000);
 
         (new SyncUsersWithBatchApi())->handle();
+    }
+
+    /** @test */
+    public function it_syncs_users_in_the_last_ten_minutes_when_count_is_not_up_to_1000(): void
+    {
+        $this->makeUser(200)->create(['synced_with_batch_api' => false]);
+
+        Carbon::setTestNow(Carbon::createFromTime(10, 52));
+
+
+
+        (new SyncUsersWithBatchApi())->handle();
+
+        $this->assertDatabaseHas('users', ['synced_with_batch_api' => true]);
+        $this->assertDatabaseMissing('users', ['synced_with_batch_api' => false]);
     }
 
     private function mockBatchApi(): void
