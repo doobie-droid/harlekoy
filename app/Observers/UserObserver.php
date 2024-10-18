@@ -26,7 +26,7 @@ class UserObserver
      */
     public function updated(User $user)
     {
-        if ($user->isDirty('sync_with_batch_api') || $user->isDirty('password') || $user->isDirty('remember_token')) {
+        if ($user->isDirty(['synced_with_batch_api', 'password', 'remember_token'])) {
             return;
         }
         $user->synced_with_batch_api = false;
