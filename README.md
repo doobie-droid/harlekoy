@@ -34,7 +34,7 @@ If you are using Ubuntu 20 or above, read [this](https://medium.com/@lesliedougl
 1. Clone the repository:
 
 ```
-git clone git@github.com:doobie-droid/harlekoy.git && cd harlekoy
+git clone git@github.com:doobie-droid/laravel_developer_showdown-Leslie_Douglas.git && cd laravel_developer_showdown-Leslie_Douglas
 ```
 
 2. Create a copy from .env.example file:
