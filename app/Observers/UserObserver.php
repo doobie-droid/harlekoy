@@ -19,12 +19,12 @@ class UserObserver
     }
 
     /**
-     * Handle the User "updated" event.
+     * Handle the User "updating" event.
      *
      * @param  \App\Models\User  $user
      * @return void
      */
-    public function updated(User $user)
+    public function updating(User $user)
     {
         if ($user->isDirty(['synced_with_batch_api', 'password', 'remember_token'])) {
             return;
